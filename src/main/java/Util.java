@@ -52,4 +52,8 @@ public class Util {
         }
         return itemsList;
     }
+
+    public static String[] getItemNamesList() {
+        return itemNamesList;
+    }
 }

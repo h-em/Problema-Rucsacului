@@ -15,9 +15,6 @@ public class Main {
         problem.displayAveragePriceForEachItem();
 
 
-
-
-
         System.out.println("Not Sorted!");
         problem.moveItemsToBackpack();
         displayToConsole(problem);
@@ -37,15 +34,9 @@ public class Main {
         displayToConsole(problem);
         //System.out.println(problem.getItems());
 
-        System.out.println("Sorted + fraction of items  using a treeMap!");
+        System.out.println("Sorted + fraction of items (v2)!");
         problem.setBackpack(new Backpack(12));
-        problem.moveFractionToBackpackWithTreeMap();
-        displayToConsole(problem);
-        //System.out.println(problem.getItems());
-
-        System.out.println("Sorted + fraction of items  using a queue!");
-        problem.setBackpack(new Backpack(12));
-        problem.moveFractionToBackpackWithQueue();
+        problem.moveFractionToBackpack2();
         displayToConsole(problem);
         //System.out.println(problem.getItems());
 

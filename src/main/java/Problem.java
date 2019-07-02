@@ -103,79 +103,42 @@ public class Problem {
     }
 
 
-    public void moveFractionToBackpackWithTreeMap() {
-
-        Map<Item, Boolean> itemMap = new TreeMap<>();
-        for (Item item : availableItems) {
-            itemMap.put(item, true);
-        }
-        for (Item item : itemMap.keySet()) {
-            if (itemMap.get(item) == true) {
-                backpack.addFraction(item);
-                itemMap.put(item, false);
-            }
-        }
-    }
-
-    public void moveFractionToBackpackWithQueue() {
+    public void moveFractionToBackpack2() {
 
         Set<Item> itemSet = new TreeSet<>(availableItems);
-        Queue<Item> itemsQueue = new LinkedList<>(itemSet);
-
-        while (itemsQueue.isEmpty() != false || backpack.getTotalWeightOfItems() < backpack.getCapacity()) {
-            Item item = itemsQueue.poll();
+        for (Item item : itemSet) {
             backpack.addFraction(item);
+
+            availableItems.remove(item);
         }
     }
 
-    public Map getNumberOfItemsWeHave() {
+
+    public Map getNumberOfEachItems() {
         Map<String, Integer> mapOfNumberOfItems = new HashMap<>();
 
-        int nrOflaptop = 0;
-        int bottle = 0;
-        int phone = 0;
-        int sunglasses = 0;
-        int book = 0;
-        int pen = 0;
-        int radio = 0;
+        int[] frArray = new int[availableItems.size()];
 
-        for (Item item : availableItems) {
-            switch (item.getName()) {
-                case "laptop":
-                    nrOflaptop++;
-                    mapOfNumberOfItems.put("laptop", nrOflaptop);
-                    break;
-                case "bottle":
-                    bottle++;
-                    mapOfNumberOfItems.put("bottle", bottle);
-                    break;
-                case "phone":
-                    phone++;
-                    mapOfNumberOfItems.put("phone", phone);
-                    break;
-                case "sunglasses":
-                    sunglasses++;
-                    mapOfNumberOfItems.put("sunglasses", sunglasses);
-                    break;
-                case "book":
-                    book++;
-                    mapOfNumberOfItems.put("book", book);
-                    break;
-                case "pen":
-                    pen++;
-                    mapOfNumberOfItems.put("pen", pen);
-                    break;
-                case "radio":
-                    radio++;
-                    mapOfNumberOfItems.put("radio", radio);
-                    break;
+        for (int i = 0; i < availableItems.size(); i++) {
+            Item item = availableItems.get(i);
+            int count = 1;
+            for (int j = i + 1; j < availableItems.size(); j++) {
+                Item item1 = availableItems.get(j);
+                if(item.getName().equals(item1.getName())){
+                    count++;
+                    //pentru cele care au fost deja numarate
+                    frArray[j] = -1;
+                }
+            }
+            if(frArray[i] != -1){
+                mapOfNumberOfItems.put(item.getName(),count);
             }
         }
         return mapOfNumberOfItems;
     }
 
     public void displayNumberOfItems() {
-        Map<String, Item> items = getNumberOfItemsWeHave();
+        Map<String, Item> items = getNumberOfEachItems();
 
         for (String item : items.keySet()) {
             System.out.println(item + ": " + items.get(item));
@@ -187,49 +150,25 @@ public class Problem {
     public Map getAveragePriceForEachTypeOfItem() {
 
         Map<String, Double> mapOfAveragePrices = new HashMap<>();
+        Map<String, Integer> numberOfItems = getNumberOfEachItems();
 
-        Map<String, Integer> numberOfItems = getNumberOfItemsWeHave();
+        int[] frArray = new int[availableItems.size()];
 
-        double valueOfLaptops = 0;
-        double valueOfBottles = 0;
-        double valueOfPhones = 0;
-        double valueOfSunglases = 0;
-        double valueOfBooks = 0;
-        double valueOfPens = 0;
-        double valueOfRadios = 0;
-
-        for (Item item : availableItems) {
-            switch (item.getName()) {
-                case "laptop":
-                    valueOfLaptops += item.getValue();
-                    break;
-                case "bottle":
-                    valueOfBottles += item.getValue();
-                    break;
-                case "phone":
-                    valueOfPhones += item.getValue();
-                    break;
-                case "sunglasses":
-                    valueOfSunglases += item.getValue();
-                    break;
-                case "book":
-                    valueOfBooks += item.getValue();
-                    break;
-                case "pen":
-                    valueOfPens += item.getValue();
-                    break;
-                case "radio":
-                    valueOfRadios += item.getValue();
-                    break;
+        for (int i = 0; i < availableItems.size(); i++) {
+            Item item = availableItems.get(i);
+            double totalValue = item.getValue();
+            for (int j = i + 1; j < availableItems.size(); j++) {
+                Item item1 = availableItems.get(j);
+                if(item.getName().equals(item1.getName())){
+                    totalValue+=item.getValue();
+                    //pentru cele care au fost deja numarate
+                    frArray[j] = -1;
+                }
+            }
+            if(frArray[i] != -1){
+                mapOfAveragePrices.put(item.getName(), totalValue / numberOfItems.get(item.getName()));
             }
         }
-        mapOfAveragePrices.put("laptop", valueOfLaptops / numberOfItems.get("laptop"));
-        mapOfAveragePrices.put("bottle", valueOfBottles / numberOfItems.get("bottle"));
-        mapOfAveragePrices.put("phone", valueOfPhones / numberOfItems.get("phone"));
-        mapOfAveragePrices.put("sunglasses", valueOfSunglases / numberOfItems.get("sunglasses"));
-        mapOfAveragePrices.put("book", valueOfBooks / numberOfItems.get("book"));
-        mapOfAveragePrices.put("pen", valueOfPens / numberOfItems.get("pen"));
-        mapOfAveragePrices.put("radio", valueOfRadios / numberOfItems.get("radio"));
 
         return mapOfAveragePrices;
     }
