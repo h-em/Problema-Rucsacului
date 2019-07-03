@@ -112,7 +112,7 @@ public class Problem {
             availableItems.remove(item);
         }
     }
-
+/*
 
     public Map getNumberOfEachItems() {
         Map<String, Integer> mapOfNumberOfItems = new HashMap<>();
@@ -135,7 +135,25 @@ public class Problem {
             }
         }
         return mapOfNumberOfItems;
+    }*/
+
+    public Map getNumberOfEachItems() {
+        Map<String, Integer> mapOfNumberOfItems = new HashMap<>();
+        for (Item each : availableItems) {
+            Integer numberOfEach = mapOfNumberOfItems.get(each.getName());
+            if (numberOfEach == null) {
+                numberOfEach = 1;
+            } else {
+                numberOfEach = numberOfEach + 1;
+            }
+            mapOfNumberOfItems.put(each.getName(), numberOfEach);
+        }
+        return mapOfNumberOfItems;
     }
+
+
+
+
 
     public void displayNumberOfItems() {
         Map<String, Item> items = getNumberOfEachItems();
@@ -152,24 +170,15 @@ public class Problem {
         Map<String, Double> mapOfAveragePrices = new HashMap<>();
         Map<String, Integer> numberOfItems = getNumberOfEachItems();
 
-        int[] frArray = new int[availableItems.size()];
-
-        for (int i = 0; i < availableItems.size(); i++) {
-            Item item = availableItems.get(i);
-            double totalValue = item.getValue();
-            for (int j = i + 1; j < availableItems.size(); j++) {
-                Item item1 = availableItems.get(j);
-                if(item.getName().equals(item1.getName())){
-                    totalValue+=item.getValue();
-                    //pentru cele care au fost deja numarate
-                    frArray[j] = -1;
+            for (Item eachItem : availableItems) {
+                Double totalValueOfEach = Double.valueOf(numberOfItems.get(eachItem.getName()));
+                if (totalValueOfEach == null) {
+                    totalValueOfEach = eachItem.getValue();
+                } else {
+                    totalValueOfEach +=  eachItem.getValue();
                 }
+                mapOfAveragePrices.put(eachItem.getName(), totalValueOfEach / numberOfItems.get(eachItem.getName()));
             }
-            if(frArray[i] != -1){
-                mapOfAveragePrices.put(item.getName(), totalValue / numberOfItems.get(item.getName()));
-            }
-        }
-
         return mapOfAveragePrices;
     }
 
