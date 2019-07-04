@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Item implements Comparable<Item>{
+public class Item implements Comparable<Item> {
 
     private String name;
     private double value;
@@ -34,8 +34,8 @@ public class Item implements Comparable<Item>{
 
     @Override
     public int compareTo(Item anotherItem) {
-        double profit1= value/weight;
-        double profit2= anotherItem.value / anotherItem.weight;
-        return Double.compare(profit2,profit1);
+        double profit1 = value / weight;
+        double profit2 = anotherItem.value / anotherItem.weight;
+        return Double.compare(profit2, profit1);
     }
 }

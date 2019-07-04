@@ -79,6 +79,18 @@ public class Problem {
             backpack.add(item);
         }
     }
+    /*
+    public void trySomething() {
+        ///introduc lista mea de item-uri in threeSet ca se fie sortate dupa ratia dintre value/weight!!
+        //in functia compareTo() din Item este toata magia
+        ItemComparatorForUselessItems comparator = new ItemComparatorForUselessItems();
+        Set<Item> itemSet = new TreeSet<>(comparator);
+        itemSet.addAll(availableItems);
+        for (Item item : itemSet) {
+            backpack.add(item);
+        }
+    }*/
+
 
     ///// lista de itemuri cu greutatea cea mai mica
     //folosesc un comparator
@@ -98,7 +110,7 @@ public class Problem {
     public void moveFractionToBackpack() {
         Set<Item> itemSet = new TreeSet<>(availableItems);
         for (Item item : itemSet) {
-            backpack.addFraction(item);
+            backpack.addItemOrFractionOfAnItem(item);
         }
     }
 
@@ -107,8 +119,7 @@ public class Problem {
 
         Set<Item> itemSet = new TreeSet<>(availableItems);
         for (Item item : itemSet) {
-            backpack.addFraction(item);
-
+            backpack.addItemOrFractionOfAnItem(item);
             availableItems.remove(item);
         }
     }
@@ -152,9 +163,6 @@ public class Problem {
     }
 
 
-
-
-
     public void displayNumberOfItems() {
         Map<String, Item> items = getNumberOfEachItems();
 
@@ -165,16 +173,47 @@ public class Problem {
     }
 
 
+    public Map getTotalValueForEachItem(){
+
+        Map<String, Double> mapOfTotalValueOfEachIndex = new HashMap<>();
+
+        for (Item eachItem : availableItems) {
+            Double totalValueOfEach = mapOfTotalValueOfEachIndex.get(eachItem.getName());
+            if (totalValueOfEach == null) {
+                totalValueOfEach = eachItem.getValue();
+            } else {
+                totalValueOfEach +=  eachItem.getValue();
+            }
+            mapOfTotalValueOfEachIndex.put(eachItem.getName(), totalValueOfEach);
+        }
+        return mapOfTotalValueOfEachIndex;
+    }
+
+
+    public void displatTotalValueForEachItem() {
+        Map<String, Item> items = getTotalValueForEachItem();
+
+        System.out.println("Displat total value for each item!");
+        for (String item : items.keySet()) {
+            System.out.println(item + ": " + items.get(item));
+        }
+        System.out.println();
+    }
+
+
+
     public Map getAveragePriceForEachTypeOfItem() {
 
         Map<String, Double> mapOfAveragePrices = new HashMap<>();
         Map<String, Integer> numberOfItems = getNumberOfEachItems();
 
             for (Item eachItem : availableItems) {
-                Double totalValueOfEach = Double.valueOf(numberOfItems.get(eachItem.getName()));
+                Double totalValueOfEach = mapOfAveragePrices.get(eachItem.getName());
                 if (totalValueOfEach == null) {
                     totalValueOfEach = eachItem.getValue();
                 } else {
+                    double numberOfEachItem =  numberOfItems.get(eachItem.getName());
+                    totalValueOfEach *= numberOfEachItem; // refac suma de valori a item-urilor din map
                     totalValueOfEach +=  eachItem.getValue();
                 }
                 mapOfAveragePrices.put(eachItem.getName(), totalValueOfEach / numberOfItems.get(eachItem.getName()));
@@ -185,12 +224,56 @@ public class Problem {
     public void displayAveragePriceForEachItem() {
         Map<String, Item> items = getAveragePriceForEachTypeOfItem();
 
+        System.out.println("Display average price for each item!");
+
         for (String item : items.keySet()) {
             System.out.println(item + ": " + items.get(item));
         }
         System.out.println();
     }
+/*
+    public Map getAveragePriceForEachTypeOfItem2() {
 
+        Map<String, Double> mapOfAveragePrices = new HashMap<>();
+        Map<String, Integer> numberOfItems = getNumberOfEachItems();
+
+        int[] frArray = new int[availableItems.size()];
+
+        for (int i = 0; i < availableItems.size(); i++) {
+            Item item = availableItems.get(i);
+            double totalValue = item.getValue();
+            for (int j = i + 1; j < availableItems.size(); j++) {
+                Item item1 = availableItems.get(j);
+                if(item.getName().equals(item1.getName())){
+                    totalValue+=item.getValue();
+                    //pentru cele care au fost deja numarate
+                    frArray[j] = -1;
+                }
+            }
+            if(frArray[i] != -1){
+                mapOfAveragePrices.put(item.getName(), totalValue / numberOfItems.get(item.getName()));
+            }
+        }
+
+        return mapOfAveragePrices;
+    }
+
+
+    public void displayAveragePriceForEachItem2() {
+        Map<String, Item> items = getAveragePriceForEachTypeOfItem2();
+
+        for (String item : items.keySet()) {
+            System.out.println(item + ": " + items.get(item));
+        }
+        System.out.println();
+    }
+*/
+
+
+
+    public void moveItemsToBackpackOneByOne(Item item) {
+            backpack.addItemOrFractionOfAnItemOneByOne(item);
+    }
 
 }
 

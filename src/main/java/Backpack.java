@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Backpack {
 
@@ -9,7 +7,7 @@ public class Backpack {
 
     public Backpack(double capacity) {
         this.capacity = capacity;
-        items = new ArrayList<Item>();
+        items = new LinkedList<>();
     }
 
     public double getCapacity() {
@@ -61,7 +59,7 @@ public class Backpack {
     }
 
 
-    public void addFraction(Item item) {
+    public void addItemOrFractionOfAnItem(Item item) {
         double availableCapacity = getAvailableCapacity();
 
         if (availableCapacity == 0) return;
@@ -72,6 +70,42 @@ public class Backpack {
             Item fractionItem = new Item(item.getName(), newFractionValue, availableCapacity);
             items.add(fractionItem);
         }
+    }
+
+    public void addItemOrFractionOfAnItemOneByOne(Item item) {
+        double availableCapacity = getAvailableCapacity();
+
+        if (availableCapacity == 0) {//return;
+            System.out.println("Backpack is full!");
+
+
+            while(availableCapacity <= item.getWeight()){
+                Item theMostUnlessItem = getTheMostUnlessItem(items);
+                System.out.println("  ->>>removed " +theMostUnlessItem);
+                items.remove(theMostUnlessItem);
+                availableCapacity = getAvailableCapacity();
+            }
+
+            items.add(item);
+        }
+        else if (availableCapacity >= item.getWeight()) {
+            System.out.println("item added: "+ item);
+            items.add(item);
+        } else {
+            double newFractionValue = availableCapacity * item.getValue() / item.getWeight();
+            Item fractionItem = new Item(item.getName(), newFractionValue, availableCapacity);
+            System.out.println("Fraction of item added: "+ item);
+            items.add(fractionItem);
+        }
+    }
+
+    public Item getTheMostUnlessItem(List<Item> itemsList){
+        ItemComparatorForUselessItems comparator = new ItemComparatorForUselessItems();
+        Set<Item> uselesItemsSet = new TreeSet<>(comparator);
+        uselesItemsSet.addAll(itemsList);
+        Queue<Item> uselesItemsQueue= new LinkedList<>(uselesItemsSet);
+
+        return uselesItemsQueue.poll();
     }
 
 
