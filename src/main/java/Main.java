@@ -77,25 +77,25 @@ public class Main {
             addItem = scanner.nextInt();
             scanner.nextLine();
 */
-        Item item1 = new Item("phone",10, 5);
+        Item item1 = new Item("phone",5, 5);
         problem.moveItemsToBackpackOneByOne(item1);
-        Item item2 = new Item("water",20, 5);
+        Item item2 = new Item("water",7, 7);
         problem.moveItemsToBackpackOneByOne(item2);
-        Item item3 = new Item("gold",30, 1);
+        Item item3 = new Item("gold",8, 8);
         problem.moveItemsToBackpackOneByOne(item3);
-        Item item4 = new Item("pen",2, 1);
+      /*  Item item4 = new Item("pen",1, 1);
         problem.moveItemsToBackpackOneByOne(item4);
-        Item importantItem = new Item("passport",15, 2);
+      / Item importantItem = new Item("passport",15, 2);
         problem.moveItemsToBackpackOneByOne(importantItem);
-
+*/
         System.out.println(problem.getBackpack().getItems());
-
+/*
         Item item6 = new Item("book",20, 2.5);
         problem.moveItemsToBackpackOneByOne(item6);
         Item item5 = new Item("book2",25, 2);
         problem.moveItemsToBackpackOneByOne(item5);
         System.out.println(problem.getBackpack().getItems());
-
+*/
     }
 
     private static void displayToConsole(Problem problem) {

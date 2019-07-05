@@ -72,40 +72,81 @@ public class Backpack {
         }
     }
 
-    public void addItemOrFractionOfAnItemOneByOne(Item item) {
+    public void addItemOrFractionOfAnItemOneByOne(Item itemToAdd) {
         double availableCapacity = getAvailableCapacity();
+        boolean itemToAddIsMoreUselessThanTheMostUselessItem = false;
+        if (availableCapacity == 0) {
 
-        if (availableCapacity == 0) {//return;
-            System.out.println("Backpack is full!");
+            while (availableCapacity <= itemToAdd.getWeight()
+                    && !itemToAddIsMoreUselessThanTheMostUselessItem) {
 
+                Item theMostUselessItem = getTheMostUselessItem(items);
+                double profitForTheMostUselessItem = theMostUselessItem.getValue() / theMostUselessItem.getWeight();
+                double profitItem = itemToAdd.getValue() / itemToAdd.getWeight();
 
-            while(availableCapacity <= item.getWeight()){
-                Item theMostUnlessItem = getTheMostUnlessItem(items);
-                System.out.println("  ->>>removed " +theMostUnlessItem);
-                items.remove(theMostUnlessItem);
+                if (profitItem > profitForTheMostUselessItem) {
+                    items.remove(theMostUselessItem);
+
+                } else if (profitItem == profitItem) {
+
+                    if (itemToAdd.getWeight() < theMostUselessItem.getWeight()) {
+                        items.remove(theMostUselessItem);
+                    } else {
+                        Item theHeaviestItem = getTheHeaviestItem(items, itemToAdd);
+                        items.remove(theHeaviestItem);
+
+                        if (theHeaviestItem == null) {
+                            itemToAddIsMoreUselessThanTheMostUselessItem = true;
+                        }
+                    }
+                }
                 availableCapacity = getAvailableCapacity();
             }
 
-            items.add(item);
-        }
-        else if (availableCapacity >= item.getWeight()) {
-            System.out.println("item added: "+ item);
-            items.add(item);
+            if (!itemToAddIsMoreUselessThanTheMostUselessItem) {
+                items.add(itemToAdd);
+            }
+
+        } else if (availableCapacity >= itemToAdd.getWeight()) {
+            items.add(itemToAdd);
+
         } else {
-            double newFractionValue = availableCapacity * item.getValue() / item.getWeight();
-            Item fractionItem = new Item(item.getName(), newFractionValue, availableCapacity);
-            System.out.println("Fraction of item added: "+ item);
+            double newFractionValue = availableCapacity * itemToAdd.getValue() / itemToAdd.getWeight();
+            Item fractionItem = new Item(itemToAdd.getName(), newFractionValue, availableCapacity);
             items.add(fractionItem);
         }
     }
 
-    public Item getTheMostUnlessItem(List<Item> itemsList){
-        ItemComparatorForUselessItems comparator = new ItemComparatorForUselessItems();
+    public Item getTheMostUselessItem(List<Item> itemsList) {
+        ItemComparatorForUselessItemOrderedByWeight comparator = new ItemComparatorForUselessItemOrderedByWeight();
         Set<Item> uselesItemsSet = new TreeSet<>(comparator);
         uselesItemsSet.addAll(itemsList);
-        Queue<Item> uselesItemsQueue= new LinkedList<>(uselesItemsSet);
+        Queue<Item> uselesItemsQueue = new LinkedList<>(uselesItemsSet);
 
         return uselesItemsQueue.poll();
+    }
+
+    public Item getTheHeaviestItem(List<Item> itemsList, Item itemToCompare) {
+        ItemComparatorForUselessItemOrderedByWeight comparator = new ItemComparatorForUselessItemOrderedByWeight();
+        Set<Item> uselesItemsSet = new TreeSet<>(comparator);
+        uselesItemsSet.addAll(itemsList);
+
+        double maxWeight = itemToCompare.getWeight();
+        double profitForItemToCompare = itemToCompare.getValue() / itemToCompare.getWeight();
+
+        Item theHeaviestItem = null;
+        Iterator<Item> setIterator = uselesItemsSet.iterator();
+        //itereaza doar pana la un profit <= cu itemul pe care vreau sa-l adaug
+        while (setIterator.hasNext()
+                && setIterator.next().getValue() / setIterator.next().getWeight() <= profitForItemToCompare) {
+            Item itemFormSet = setIterator.next();
+            if (maxWeight < itemFormSet.getWeight()) {
+                maxWeight = itemFormSet.getWeight();
+                theHeaviestItem = itemFormSet;
+            }
+        }
+
+        return theHeaviestItem;
     }
 
 
