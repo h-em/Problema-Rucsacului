@@ -59,16 +59,18 @@ public class Backpack {
     }
 
 
-    public void addItemOrFractionOfAnItem(Item item) {
+    public boolean addItemOrFractionOfAnItem(Item item) {
         double availableCapacity = getAvailableCapacity();
 
-        if (availableCapacity == 0) return;
+        if (availableCapacity == 0) return false;
         if (availableCapacity >= item.getWeight()) {
             items.add(item);
+            return true;
         } else {
             double newFractionValue = availableCapacity * item.getValue() / item.getWeight();
             Item fractionItem = new Item(item.getName(), newFractionValue, availableCapacity);
             items.add(fractionItem);
+            return true;
         }
     }
 

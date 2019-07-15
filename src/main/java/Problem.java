@@ -27,6 +27,7 @@ public class Problem {
     }
 
 
+
     public void addAvailableItems(Item item) {
         availableItems.add(item);
     }
@@ -119,8 +120,9 @@ public class Problem {
 
         Set<Item> itemSet = new TreeSet<>(availableItems);
         for (Item item : itemSet) {
-            backpack.addItemOrFractionOfAnItem(item);
-            availableItems.remove(item);
+            if(backpack.addItemOrFractionOfAnItem(item)) {
+                availableItems.remove(item);
+            }
         }
     }
 /*
@@ -155,8 +157,19 @@ public class Problem {
             if (numberOfEach == null) {
                 numberOfEach = 1;
             } else {
-                numberOfEach = numberOfEach + 1;
+                numberOfEach += 1;
             }
+            mapOfNumberOfItems.put(each.getName(), numberOfEach);
+
+
+            //!!!!!!!!MAI SIMPLU
+            /*if (numberOfEach == null) {
+                numberOfEach = 0;
+            }
+            mapOfNumberOfItems.put(each.getName(), numberOfEach+1);
+            */
+
+
             mapOfNumberOfItems.put(each.getName(), numberOfEach);
         }
         return mapOfNumberOfItems;

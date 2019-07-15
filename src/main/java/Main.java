@@ -83,11 +83,11 @@ public class Main {
         problem.moveItemsToBackpackOneByOne(item2);
         Item item3 = new Item("gold",8, 8);
         problem.moveItemsToBackpackOneByOne(item3);
-      /*  Item item4 = new Item("pen",1, 1);
+        Item item4 = new Item("pen",1, 1);
         problem.moveItemsToBackpackOneByOne(item4);
-      / Item importantItem = new Item("passport",15, 2);
+        Item importantItem = new Item("passport",15, 8);
         problem.moveItemsToBackpackOneByOne(importantItem);
-*/
+
         System.out.println(problem.getBackpack().getItems());
 /*
         Item item6 = new Item("book",20, 2.5);
